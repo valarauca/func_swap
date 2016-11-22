@@ -1,0 +1,12 @@
+[package]
+name = "func_swap"
+version = "0.1.0"
+authors = ["William Cody Laeder <codylaeder@gmail.com>"]
+repository = "https://github.com/valarauca/func_swap"
+homepage = "https://github.com/valarauca/func_swap"
+license = "Apache-2.0"
+readme = "README.md"
+description = "A macro that defines a function, that can be replaced with other functions."
+
+[dependencies]
+lazy_static = "0.2.*"
