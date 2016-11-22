@@ -4,18 +4,18 @@ swap functions!
 This crate is a macro that allows for you to define a function which can be
 hotswapped at runtime with another function (of the same symbol). The swap
 is memory safe even in concurrent systems. The over head is just a pointer
-load, and an `if != 0` jump at the start of your function (on AMD64/ARMv8).
-On older arm there is a load memory barrier on call this are the cheapest
-barriers generally.  
+load, and an != 0 jump at the start of your function (on AMD64/ARMv8).
+On older ARM there is a half memory barrier (load), this barrier is very
+cheap.
 
 Replacing a function does trigger a full `Ordering::SeqCst` memory barrier
 to ensure that all future calls will see the new function.
 
-To use this crate include
+To use this crate include:
 
 ```
 [dependencies]
-func_swap = "0.0.1"
+func_swap = "0.1.0"
 lazy_static = "0.2.*"
 ```
 
@@ -49,7 +49,7 @@ To demystify the macro:
 modfunc!(
 	SWAP_FUNCTION: ident,		//define a function to swap functions
 	FUNCTION_POINTER: ident,	//define a constant, this name will really shouldn't be used
-	SWAPPABLE: ident		//define the main function
+	SWAPPABLE: ident			//define the main function
 	( var:type, var2:type)		//args
 	type OR (type,type,...)		//return values
 	{
@@ -84,12 +84,12 @@ revision of the Rust-Compiler.
 
 ###Can I use non-Rust ABI's?
 
-Yes. If you start the macro with `@ABI:` The first argument is an `expr` of
+Yes. If you start the macro with `ABI:` The first argument is an `expr` of
 the ABI. This looks like:
 
 ```rust
 modfunc!(ABI: "C", swap_function, functionptrname, function(args: yada)
 ```
 
-This feature is no tested heavily YMMV. It also should be noted the 
-default function will remain a native function. 
+This feature is not tested heavily, YMMV. It also should be noted the 
+default function will remain a native "Rust" function. But the function that _can_ be swapped will be the the alien ABI.
