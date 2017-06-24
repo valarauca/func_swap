@@ -1,4 +1,6 @@
-#func-swap
+func-swap
+---
+
 swap functions!
 
 This crate is a macro that allows for you to define a function which can be
@@ -57,18 +59,18 @@ modfunc!(
 	});
 ```
 
-##Question and Answer:
+## Question and Answer:
 
-###Can I use generics?
+#### Can I use generics?
 
 No-ish. Function signatures need to be concrete and known at compile time.
 You likely can get away with TraitObjects. But I haven't tested this. YYMV
 
-###Can I capture values?
+#### Can I capture values?
 
 No. This is not a lambda expression this is defining a static function.
 
-###Can I swap with functions that I load via dynamic linking?
+#### Can I swap with functions that I load via dynamic linking?
 
 Yes. But use this with care. When you unload the library some flags will
 invalidate the existing function pointers. Which may cause the function
@@ -76,13 +78,13 @@ to call into un-allocated virtual memory... leading to a SEGFAULT.
 
 If you unload a function ensure you set the value to NULL. `unsafe{mem::transmute(0usize)`. This will restore default behavior.
 
-###What ABI is used by default?
+#### What ABI is used by default?
 
 The `extern "Rust"` ABI is used. It should be noted this is non-stable. So
 if you are dynamically linking use SO's/DLL's generated with the same
 revision of the Rust-Compiler.
 
-###Can I use non-Rust ABI's?
+### Can I use non-Rust ABI's?
 
 Yes. If you start the macro with `ABI:` The first argument is an `expr` of
 the ABI. This looks like:
